@@ -1,5 +1,9 @@
 LIBS=
 LAMBDA_FUNCTION_NAME=my-lambda-function
+DESCRIPTION=This is my Lambda function
+RUNTIME=python2.7
+HANDLER=lambda_function.lambda_handler
+IAM_ROLE=arn:aws:iam::928205109583:role/service-role/LambdaBasicExecution
 
 all:
 	@echo "WELCOME TO THE '$(LAMBDA_FUNCTION_NAME)' BUILD SYSTEM"
@@ -7,6 +11,7 @@ all:
 	@echo "make deps\tinstall depenecies (LIBS= from Makefile)"
 	@echo "make package\tpackage application as $(LAMBDA_FUNCTION_NAME).zip file"
 	@echo "make deploy\tdeploy application to AWS Lamdba"
+	@echo "make release\trelease as new application version to AWS Lambda"
 	@echo "make clean\tclean up vendored libraries"
 	@echo "make mrproper\tclean up everything"
 
@@ -22,8 +27,14 @@ force-deps:
 package: deps
 	zip -r9 $(LAMBDA_FUNCTION_NAME).zip $(LIBS) lambda_function.py
 
-deploy: package
+setup:
+	aws lambda create-function --function-name $(LAMBDA_FUNCTION_NAME) --runtime $(RUNTIME) --role $(IAM_ROLE) --handler $(HANDLER) --description "$(DESCRIPTION)" --zip-file fileb://$(LAMBDA_FUNCTION_NAME).zip || aws lambda update-function-configuration --function-name $(LAMBDA_FUNCTION_NAME) --runtime $(RUNTIME) --role $(IAM_ROLE) --handler $(HANDLER) --description "$(DESCRIPTION)"
+
+deploy: package setup
 	aws lambda update-function-code --function-name $(LAMBDA_FUNCTION_NAME) --zip-file fileb://$(LAMBDA_FUNCTION_NAME).zip
+
+release: deploy
+	aws lambda publish-version --function-name $(LAMBDA_FUNCTION_NAME)
 
 .PHONY: clean
 

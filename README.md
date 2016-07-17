@@ -2,9 +2,17 @@
 Simple framework to develop and deploy AWS Lambda functions written in Python.
 
 ## requirements
-* working setup of ```make``` (should be on every modern box Linux/UNIX box)
+* working setup of ```make``` (should be on every modern Linux/UNIX box)
 * working setup of ```pip``` (either with or without virtualenv)
 * working setup of the AWS CLI tool (including appropriate credentials)
+
+## setup
+Edit the provided ```Makefile``` and add the ARN of an approprite IAM Role. This
+IAM Role has to exist in your AWS account and should allow at least
+```logs:CreateLogStream``` and ```logs:PutLogEvents``` as a basic policy. Details
+on setting up an appropriate IAM Role for you Lambda function can be found in the
+[AWS Lambda Permissions Model](http://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role)
+documentation.
 
 ## development
 Use the skeleton provided by ```lambda_function.py``` to get started. AWS Lambda
@@ -20,3 +28,6 @@ it to the ```LIBS``` in the ```Makefile```.
 
 ## deployment
 Use ```make deploy``` in the console to deploy your application to AWS Lambda.
+
+## advanced usage
+Use ```make``` the console to see the available options.
