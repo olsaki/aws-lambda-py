@@ -36,6 +36,13 @@ deploy: package setup
 release: deploy
 	aws lambda publish-version --function-name $(LAMBDA_FUNCTION_NAME)
 
+invoke:
+	@aws lambda invoke --function-name $(LAMBDA_FUNCTION_NAME) $(LAMBDA_FUNCTION_NAME).log > /dev/null
+	@cat $(LAMBDA_FUNCTION_NAME).log
+	@echo
+
+run: deploy invoke
+
 .PHONY: clean
 
 clean:
