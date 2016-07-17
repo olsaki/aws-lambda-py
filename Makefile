@@ -3,7 +3,7 @@ LAMBDA_FUNCTION_NAME=my-lambda-function
 DESCRIPTION=This is my Lambda function
 RUNTIME=python2.7
 HANDLER=lambda_function.lambda_handler
-IAM_ROLE=arn:aws:iam::928205109583:role/service-role/LambdaBasicExecution
+IAM_ROLE=
 
 all:
 	@echo "WELCOME TO THE '$(LAMBDA_FUNCTION_NAME)' BUILD SYSTEM"
