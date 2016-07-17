@@ -19,7 +19,7 @@ upgrade-deps:
 force-deps:
 	pip install $(LIBS) --no-deps --force-reinstall -t .
 
-package: debs
+package: deps
 	zip -r9 $(LAMBDA_FUNCTION_NAME).zip $(LIBS) lambda_function.py
 
 deploy: package
