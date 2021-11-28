@@ -34,6 +34,12 @@ deploy: package setup
 	aws lambda update-function-code --function-name $(LAMBDA_FUNCTION_NAME) --zip-file fileb://$(LAMBDA_FUNCTION_NAME).zip
 
 release: deploy
+	while status=$$(aws lambda get-function --function-name $(LAMBDA_FUNCTION_NAME) --query Configuration.LastUpdateStatus --output text); do \
+		[ "$$status" != InProgress ] && break; \
+		sleep 1; \
+	done; \
+	echo LastUpdateStatus: "$${status:-(unknown)}"; \
+	[ "$$status" = Successful ]
 	aws lambda publish-version --function-name $(LAMBDA_FUNCTION_NAME)
 
 invoke:
